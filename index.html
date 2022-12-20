@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+      #htmltoimage {
+        width: 100%;
+        margin: auto;
+      }
+      html, body {
+        height: 100%;
+        margin: 0px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; align-items: stretch; background-color: #00000001; height: 100%">
+      <div style="display: flex; align-items: center; justify-content: center; min-width: 320px; width: 30%;">
+        <div>
+          <div style="text-align: center;">
+            <img src="klick-karnival.png" height="100px">
+          </div>
+          <br/>
+          <br/>
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <div style="width: 90%;">
+              <div>
+                <label for="file">Select your photo:</label>
+                <input type="file" id="file" name="file" accept="image/png, image/jpeg" onchange="loadFile(event)" />
+              </div>
+              <br/>
+              <div>
+                <label for="caption">Enter your caption:</label>
+                <br/>
+                <textarea id="caption" style="width: 100%;" oninput="loadCaption(event)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; width: 70%; background-color: #f0ffff;">
+        <div style="width: 90%;">
+          <div id="htmltoimage" style="display: flex; align-items: center; width: auto; background-color: white; padding: 15px;border: 3px solid #f0ffff;">
+            <img id="output" src="" crossorigin="anonymous" style="max-height: 200px; border: 3px solid #f0ffff;" />
+            <div id="pCaption" style="padding: 15px;">Please enter details to see preview</div>
+          </div>
+          <br />
+          <div style="text-align: center">
+            <button onclick="downloadimage()" class="clickbtn">Click To Download Image</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script>
+      var loadFile = function(event) {
+        var output = document.getElementById('output');
+        let file = event.target.files[0];
+        let reader = new FileReader();
+        reader.onloadend = function() {
+          output.src = reader.result;
+          console.log(reader.result);
+        }
+        reader.readAsDataURL(file);
+      };
+
+      var loadCaption = function(event) {
+        var pCaption = document.getElementById('pCaption');
+        pCaption.innerHTML = event.target.value;
+      };
+
+      function downloadimage() {
+        var container = document.getElementById("htmltoimage");
+        html2canvas(container, {
+          allowTaint: true,
+          windowWidth: 3000,
+          windowHeight: 3000,
+        }).then(function(canvas) {
+          var link = document.createElement("a");
+          document.body.appendChild(link);
+          link.download = "html_image.jpg";
+          link.href = canvas.toDataURL();
+          link.target = '_blank';
+          link.click();
+        });
+      }    
+    </script>
+  </body>
+</html>
